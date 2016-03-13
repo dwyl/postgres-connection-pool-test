@@ -1,4 +1,4 @@
-require('./create_tables')
+require('./create_table.js')
 var http = require('http');
 var pg = require('pg');
 
