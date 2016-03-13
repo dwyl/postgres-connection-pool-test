@@ -1,7 +1,8 @@
-require('./create_table.js')
+require('./create_table.js'); // create the visit table if it does not exist;
 var http = require('http');
 var pg = require('pg');
 
+// on heroku the Postgres URL is an environment variable:
 var conString = process.env.DATABASE_URL || "postgres://postgres:@localhost/test";
 
 var server = http.createServer(function(req, res) {
@@ -50,4 +51,4 @@ var server = http.createServer(function(req, res) {
   });
 })
 
-server.listen(process.env.PORT || 3001)
+server.listen(process.env.PORT || 3001); // for heroku
