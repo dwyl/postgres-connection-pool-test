@@ -10,3 +10,14 @@ we were experiencing an issue when multiple connections were made.
 This issue is described in: https://github.com/brianc/node-postgres/issues/725
 and a *potential* solution was suggested:
 https://github.com/brianc/node-postgres/issues/725#issuecomment-195718983
+
+The code in `server.js` is copied from:
+https://github.com/brianc/node-postgres/wiki/Example
+
+We added a few console logs and an *optional* extra parameter to
+the `handleError` function to show how many times it is being called.
+
+## Discovered
+
+Each HTTP request is inserting *two* records into the `visit` table,
+where we *expect* only *one* to be inserted ...
