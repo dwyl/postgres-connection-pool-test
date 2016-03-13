@@ -1,14 +1,15 @@
 var http = require('http');
 var pg = require('pg');
 
-var conString = "postgres://postgres:@localhost/postgres";
+var conString = "postgres://postgres:@localhost/test";
 
 var server = http.createServer(function(req, res) {
 
   // get a pg client from the connection pool
   pg.connect(conString, function(err, client, done) {
 
-    var handleError = function(err) {
+    var handleError = function(err, query) {
+      console.log('handleError...', query);
       // no error occurred, continue with the request
       if(!err) return false;
 
@@ -18,6 +19,7 @@ var server = http.createServer(function(req, res) {
       // In this case, if we have successfully received a client (truthy)
       // then it will be removed from the pool.
       if(client){
+        console.log('>> done(client)');
         done(client);
       }
       res.writeHead(500, {'content-type': 'text/plain'});
@@ -26,19 +28,21 @@ var server = http.createServer(function(req, res) {
     };
 
     // handle an error from the connection
-    if(handleError(err)) return;
+    if(handleError(err, 'CONNECT')) return;
 
     // record the visit
     client.query('INSERT INTO visit (date) VALUES ($1)', [new Date()], function(err, result) {
 
       // handle an error from the query
-      if(handleError(err)) return;
+      if(handleError(err, 'INSERT')) return;
+      console.log(' - - - - - - - - - - - - - - - - - - - - - - - - - - - ');
+      console.log(err, result);
 
       // get the total number of visits today (including the current visit)
       client.query('SELECT COUNT(date) AS count FROM visit', function(err, result) {
-
+        // console.log(err, result);
         // handle an error from the query
-        if(handleError(err)) return;
+        if(handleError(err, 'SELECT')) return;
 
         // return the client to the connection pool for other requests to reuse
         done();
