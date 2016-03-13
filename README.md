@@ -21,3 +21,11 @@ the `handleError` function to show how many times it is being called.
 
 Each HTTP request is inserting *two* records into the `visit` table,
 where we *expect* only *one* to be inserted ...
+
+## Try it!
+
+We pushed the example up to heroku:
+https://node-postgres-example.herokuapp.com/
+
+When you refresh the page you see that the visit count goes up by ***two***
+each time...!
